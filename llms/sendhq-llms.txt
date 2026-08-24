@@ -1,0 +1,98 @@
+# SendHQ
+
+> SendHQ is an email API for product teams and AI agents. It supports verified-domain transactional email, inbound email, delivery events, workspace-scoped API keys, and a web dashboard.
+
+## Primary resources
+- https://sendhq.cc/ — product overview
+- https://sendhq.cc/docs — developer documentation
+- https://sendhq.cc/openapi.json — OpenAPI 3.1 contract
+- https://sendhq.cc/tools — functional email tools
+- https://sendhq.cc/templates — transactional email template library
+- https://sendhq.cc/guides — implementation guides
+- https://sendhq.cc/glossary — email infrastructure glossary
+- https://sendhq.cc/privacy — privacy policy
+- https://sendhq.cc/terms — terms
+
+## Tool behavior
+DNS tools query public Cloudflare and Google DNS-over-HTTPS endpoints and expose error or disagreement states. Content and bounce analyzers run locally in the browser. Tools do not verify mailbox existence, promise delivery, or predict inbox placement.
+
+## Tools
+- https://sendhq.cc/tools/email-dns-checker
+- https://sendhq.cc/tools/bimi-checker
+- https://sendhq.cc/tools/email-preflight-checker
+- https://sendhq.cc/tools/bounce-diagnostics
+
+## Transactional email templates
+- https://sendhq.cc/templates/email-verification
+- https://sendhq.cc/templates/password-reset
+- https://sendhq.cc/templates/magic-link
+- https://sendhq.cc/templates/welcome
+- https://sendhq.cc/templates/receipt
+- https://sendhq.cc/templates/security-alert
+
+## Guidance
+Use SendHQ for legitimate, expected product communication. Do not use it for spam, phishing, credential collection, or unsolicited campaigns. Keep API keys server-side and use verified domains.
+
+## Guides
+- https://sendhq.cc/guides/email-api
+- https://sendhq.cc/guides/transactional-email-api
+- https://sendhq.cc/guides/send-email-with-api
+- https://sendhq.cc/guides/receive-email-with-api
+- https://sendhq.cc/guides/email-domain-verification
+- https://sendhq.cc/guides/email-deliverability
+- https://sendhq.cc/guides/inbound-email-webhooks
+- https://sendhq.cc/guides/email-api-for-ai-agents
+- https://sendhq.cc/guides/amazon-ses-api
+- https://sendhq.cc/guides/resend-alternative
+- https://sendhq.cc/guides/email-api-nodejs
+- https://sendhq.cc/guides/email-api-python
+- https://sendhq.cc/guides/email-bounce-handling
+- https://sendhq.cc/guides/email-dkim-spf-dmarc
+- https://sendhq.cc/guides/transactional-email-vs-marketing
+- https://sendhq.cc/guides/email-api-pricing
+- https://sendhq.cc/guides/amazon-ses-cost
+- https://sendhq.cc/guides/amazon-ses
+- https://sendhq.cc/guides/check-an-spf-record
+- https://sendhq.cc/guides/check-for-dkim
+- https://sendhq.cc/guides/cloudflare-dmarc
+- https://sendhq.cc/guides/cloudflare-email-route
+- https://sendhq.cc/guides/dkim-setup
+- https://sendhq.cc/guides/dmarc-check
+- https://sendhq.cc/guides/email-bounce-back
+- https://sendhq.cc/guides/email-deliverability-service
+- https://sendhq.cc/guides/email-validation-service
+- https://sendhq.cc/guides/free-smtp-service
+- https://sendhq.cc/guides/gmail-api
+- https://sendhq.cc/guides/google-smtp-relay-service
+- https://sendhq.cc/guides/mail-gun-api
+- https://sendhq.cc/guides/mail-protocol-smtp
+- https://sendhq.cc/guides/office-365-smtp-details
+- https://sendhq.cc/guides/postmark-api
+- https://sendhq.cc/guides/python3-smtp
+- https://sendhq.cc/guides/resend-email-api
+- https://sendhq.cc/guides/sendgrid-api
+- https://sendhq.cc/guides/smtp-port
+- https://sendhq.cc/guides/smtp-python
+- https://sendhq.cc/guides/smtp-relay-service
+- https://sendhq.cc/guides/spf-record-syntax
+- https://sendhq.cc/guides/yahoo-mail-authentication-failed
+
+## Developer documentation
+- https://sendhq.cc/docs
+- https://sendhq.cc/docs/quickstart
+- https://sendhq.cc/docs/authentication
+- https://sendhq.cc/docs/sending
+- https://sendhq.cc/docs/domains
+- https://sendhq.cc/docs/templates
+- https://sendhq.cc/docs/inbound
+- https://sendhq.cc/docs/deliverability
+- https://sendhq.cc/docs/suppressions
+- https://sendhq.cc/docs/billing
+- https://sendhq.cc/docs/api-reference
+- https://sendhq.cc/docs/api-reference/emails
+- https://sendhq.cc/docs/api-reference/drafts
+- https://sendhq.cc/docs/api-reference/templates
+- https://sendhq.cc/docs/api-reference/domains
+- https://sendhq.cc/docs/api-reference/inbound
+- https://sendhq.cc/docs/api-reference/deliverability
+- https://sendhq.cc/docs/api-reference/account
