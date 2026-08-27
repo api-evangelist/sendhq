@@ -26,21 +26,124 @@ tags_raw:
 - inbound email
 - deliverability
 apis:
-- aid: sendhq:sendhq-api
-  name: SendHQ API
-  description: >-
-    Transactional and inbound email — send, threads, drafts, attachments, hosted templates,
-    domains and DNS verification, deliverability, suppressions, account and billing.
-    32 paths, 47 operations, bearer token or session cookie.
+- aid: sendhq:sendhq-account-and-billing-api
+  name: SendHQ Account and billing API
+  description: Session-authenticated workspace administration.
   humanURL: https://sendhq.cc/docs/api-reference
   baseURL: https://sendhq.cc/api/v1
   tags:
-  - Email
-  - Transactional Email
+  - Account and billing
+  properties:
+  - type: OpenAPI
+    url: openapi/sendhq-account-and-billing-api-openapi.yml
+  - type: APIReference
+    url: https://sendhq.cc/openapi.json
+  - type: Documentation
+    url: https://sendhq.cc/docs/api-reference
+  - type: GettingStarted
+    url: https://sendhq.cc/docs
+  - type: Guides
+    url: https://sendhq.cc/guides
+- aid: sendhq:sendhq-deliverability-api
+  name: SendHQ Deliverability API
+  description: Inspect events, reputation outcomes, and blocked recipients.
+  humanURL: https://sendhq.cc/docs/api-reference
+  baseURL: https://sendhq.cc/api/v1
+  tags:
   - Deliverability
   properties:
   - type: OpenAPI
-    url: openapi/sendhq-api-openapi.yml
+    url: openapi/sendhq-deliverability-api-openapi.yml
+  - type: APIReference
+    url: https://sendhq.cc/openapi.json
+  - type: Documentation
+    url: https://sendhq.cc/docs/api-reference
+  - type: GettingStarted
+    url: https://sendhq.cc/docs
+  - type: Guides
+    url: https://sendhq.cc/guides
+- aid: sendhq:sendhq-domains-api
+  name: SendHQ Domains API
+  description: Provision sender identities and understand DNS verification state.
+  humanURL: https://sendhq.cc/docs/api-reference
+  baseURL: https://sendhq.cc/api/v1
+  tags:
+  - Domains
+  properties:
+  - type: OpenAPI
+    url: openapi/sendhq-domains-api-openapi.yml
+  - type: APIReference
+    url: https://sendhq.cc/openapi.json
+  - type: Documentation
+    url: https://sendhq.cc/docs/api-reference
+  - type: GettingStarted
+    url: https://sendhq.cc/docs
+  - type: Guides
+    url: https://sendhq.cc/guides
+- aid: sendhq:sendhq-drafts-and-attachments-api
+  name: SendHQ Drafts and attachments API
+  description: Build composer flows with private attachment storage.
+  humanURL: https://sendhq.cc/docs/api-reference
+  baseURL: https://sendhq.cc/api/v1
+  tags:
+  - Drafts and attachments
+  properties:
+  - type: OpenAPI
+    url: openapi/sendhq-drafts-and-attachments-api-openapi.yml
+  - type: APIReference
+    url: https://sendhq.cc/openapi.json
+  - type: Documentation
+    url: https://sendhq.cc/docs/api-reference
+  - type: GettingStarted
+    url: https://sendhq.cc/docs
+  - type: Guides
+    url: https://sendhq.cc/guides
+- aid: sendhq:sendhq-emails-and-threads-api
+  name: SendHQ Emails and threads API
+  description: Send, retrieve, search, reply, and inspect delivery events.
+  humanURL: https://sendhq.cc/docs/api-reference
+  baseURL: https://sendhq.cc/api/v1
+  tags:
+  - Emails and threads
+  properties:
+  - type: OpenAPI
+    url: openapi/sendhq-emails-and-threads-api-openapi.yml
+  - type: APIReference
+    url: https://sendhq.cc/openapi.json
+  - type: Documentation
+    url: https://sendhq.cc/docs/api-reference
+  - type: GettingStarted
+    url: https://sendhq.cc/docs
+  - type: Guides
+    url: https://sendhq.cc/guides
+- aid: sendhq:sendhq-hosted-templates-api
+  name: SendHQ Hosted templates API
+  description: Draft, render, test, version, publish, and send reusable content.
+  humanURL: https://sendhq.cc/docs/api-reference
+  baseURL: https://sendhq.cc/api/v1
+  tags:
+  - Hosted templates
+  properties:
+  - type: OpenAPI
+    url: openapi/sendhq-hosted-templates-api-openapi.yml
+  - type: APIReference
+    url: https://sendhq.cc/openapi.json
+  - type: Documentation
+    url: https://sendhq.cc/docs/api-reference
+  - type: GettingStarted
+    url: https://sendhq.cc/docs
+  - type: Guides
+    url: https://sendhq.cc/guides
+- aid: sendhq:sendhq-inbound-email-api
+  name: SendHQ Inbound email API
+  description: Create addresses and work with received conversations.
+  humanURL: https://sendhq.cc/docs/api-reference
+  baseURL: https://sendhq.cc/api/v1
+  tags:
+  - Inbound email
+  properties:
+  - type: OpenAPI
+    url: openapi/sendhq-inbound-email-api-openapi.yml
   - type: APIReference
     url: https://sendhq.cc/openapi.json
   - type: Documentation
