@@ -1,0 +1,322 @@
+openapi: 3.2.0
+info:
+  title: SendHQ Domains API
+  version: '2026-08-23'
+  description: Send and receive expected email, manage verified domains and hosted templates, and inspect delivery outcomes.
+servers:
+- url: https://sendhq.cc/api/v1
+tags:
+- name: Domains
+  description: Provision sender identities and understand DNS verification state.
+paths:
+  /domains:
+    post:
+      operationId: post_domains
+      tags:
+      - Domains
+      summary: Add a sending domain
+      description: Add a sending domain
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  status:
+                    type: string
+                  records:
+                    type: array
+                    items: {}
+                required:
+                - id
+                - name
+                - status
+                - records
+                additionalProperties: false
+              example:
+                id: dom_…
+                name: example.com
+                status: pending
+                records: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+              - name
+              additionalProperties: false
+            example:
+              name: example.com
+    get:
+      operationId: get_domains
+      tags:
+      - Domains
+      summary: List domains and cached DNS state
+      description: List domains and cached DNS state
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /domains/{id}:
+    get:
+      operationId: get_domains_id
+      tags:
+      - Domains
+      summary: Retrieve domain setup details
+      description: Retrieve domain setup details
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  setup_status:
+                    type: string
+                  records:
+                    type: array
+                    items: {}
+                  dns_issues:
+                    type: array
+                    items: {}
+                required:
+                - id
+                - name
+                - setup_status
+                - records
+                - dns_issues
+                additionalProperties: false
+              example:
+                id: dom_…
+                name: example.com
+                setup_status: checking
+                records: []
+                dns_issues: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    delete:
+      operationId: delete_domains_id
+      tags:
+      - Domains
+      summary: Delete a domain
+      description: Delete a domain
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                - ok
+                additionalProperties: false
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /domains/{id}/verify:
+    post:
+      operationId: post_domains_id_verify
+      tags:
+      - Domains
+      summary: Refresh SES and DNS verification
+      description: Refresh SES and DNS verification
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  domain:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      status:
+                        type: string
+                    required:
+                    - id
+                    - status
+                    additionalProperties: false
+                  checks:
+                    type: object
+                    properties:
+                      ses:
+                        type: boolean
+                    required:
+                    - ses
+                    additionalProperties: false
+                  status:
+                    type: string
+                required:
+                - domain
+                - checks
+                - status
+                additionalProperties: false
+              example:
+                domain:
+                  id: dom_…
+                  status: verified
+                checks:
+                  ses: true
+                status: verified
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - status
+          properties:
+            message:
+              type: string
+            status:
+              type: integer
+            code:
+              type:
+              - string
+              - 'null'
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: re_…
+      description: Workspace API key. Keep it server-side.
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sendhq_session_v2
+      description: Browser session used for account administration.

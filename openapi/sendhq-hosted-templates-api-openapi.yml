@@ -1,0 +1,700 @@
+openapi: 3.2.0
+info:
+  title: SendHQ Hosted templates API
+  version: '2026-08-23'
+  description: Send and receive expected email, manage verified domains and hosted templates, and inspect delivery outcomes.
+servers:
+- url: https://sendhq.cc/api/v1
+tags:
+- name: Hosted templates
+  description: Draft, render, test, version, publish, and send reusable content.
+paths:
+  /templates:
+    get:
+      operationId: get_templates
+      tags:
+      - Hosted templates
+      summary: List hosted templates
+      description: List hosted templates
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: lifecycle
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - active
+          - archived
+          - all
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    post:
+      operationId: post_templates
+      tags:
+      - Hosted templates
+      summary: Create a hosted template
+      description: Create a hosted template
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  template:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      key:
+                        type: string
+                    required:
+                    - id
+                    - key
+                    additionalProperties: false
+                required:
+                - template
+                additionalProperties: false
+              example:
+                template:
+                  id: tmpl_…
+                  key: account-welcome
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                key:
+                  type: string
+                starter:
+                  type: string
+              required:
+              - name
+              - key
+              - starter
+              additionalProperties: false
+            example:
+              name: Account welcome
+              key: account-welcome
+              starter: welcome
+  /templates/{id}:
+    get:
+      operationId: get_templates_id
+      tags:
+      - Hosted templates
+      summary: Retrieve drafts, releases, and usage
+      description: Retrieve drafts, releases, and usage
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  template:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                    required:
+                    - id
+                    additionalProperties: false
+                  versions:
+                    type: array
+                    items: {}
+                  draft: {}
+                  activeVersion: {}
+                  usage:
+                    type: array
+                    items: {}
+                required:
+                - template
+                - versions
+                - draft
+                - activeVersion
+                - usage
+                additionalProperties: false
+              example:
+                template:
+                  id: tmpl_…
+                versions: []
+                draft: null
+                activeVersion: null
+                usage: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /templates/{id}/draft:
+    put:
+      operationId: put_templates_id_draft
+      tags:
+      - Hosted templates
+      summary: Autosave a template draft
+      description: Autosave a template draft
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draft:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      revision:
+                        type: integer
+                    required:
+                    - id
+                    - revision
+                    additionalProperties: false
+                required:
+                - draft
+                additionalProperties: false
+              example:
+                draft:
+                  id: tmplv_…
+                  revision: 2
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                revision:
+                  type: integer
+                name:
+                  type: string
+                subjectTemplate:
+                  type: string
+                htmlTemplate:
+                  type: string
+                textTemplate:
+                  type: string
+                variables:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      type:
+                        type: string
+                      required:
+                        type: boolean
+                    required:
+                    - key
+                    - type
+                    - required
+                    additionalProperties: false
+                sampleData:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                  required:
+                  - first_name
+                  additionalProperties: false
+              required:
+              - revision
+              - name
+              - subjectTemplate
+              - htmlTemplate
+              - textTemplate
+              - variables
+              - sampleData
+              additionalProperties: false
+            example:
+              revision: 1
+              name: Account welcome
+              subjectTemplate: Welcome, {{first_name}}
+              htmlTemplate: <h1>Welcome, {{first_name}}</h1>
+              textTemplate: Welcome, {{first_name}}
+              variables:
+              - key: first_name
+                type: string
+                required: true
+              sampleData:
+                first_name: Asha
+    post:
+      operationId: post_templates_id_draft
+      tags:
+      - Hosted templates
+      summary: Create a new draft from the published release
+      description: Create a new draft from the published release
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draft:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      revision:
+                        type: integer
+                    required:
+                    - id
+                    - revision
+                    additionalProperties: false
+                required:
+                - draft
+                additionalProperties: false
+              example:
+                draft:
+                  id: tmplv_…
+                  revision: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /templates/{id}/render:
+    post:
+      operationId: post_templates_id_render
+      tags:
+      - Hosted templates
+      summary: Render exact server output
+      description: Render exact server output
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subject:
+                    type: string
+                  html:
+                    type: string
+                  text:
+                    type: string
+                  findings:
+                    type: array
+                    items: {}
+                required:
+                - subject
+                - html
+                - text
+                - findings
+                additionalProperties: false
+              example:
+                subject: Welcome, Asha
+                html: <h1>Welcome, Asha</h1>
+                text: Welcome, Asha
+                findings: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                  required:
+                  - first_name
+                  additionalProperties: false
+              required:
+              - data
+              additionalProperties: false
+            example:
+              data:
+                first_name: Asha
+  /templates/{id}/test:
+    post:
+      operationId: post_templates_id_test
+      tags:
+      - Hosted templates
+      summary: Send a test snapshot
+      description: Send a test snapshot
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  isTest:
+                    type: boolean
+                required:
+                - id
+                - isTest
+                additionalProperties: false
+              example:
+                id: em_…
+                isTest: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                from:
+                  type: string
+                  format: email
+                data:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                  required:
+                  - first_name
+                  additionalProperties: false
+              required:
+              - to
+              - from
+              - data
+              additionalProperties: false
+            example:
+              to:
+              - owner@example.com
+              from: hello@example.com
+              data:
+                first_name: Asha
+  /templates/{id}/publish:
+    post:
+      operationId: post_templates_id_publish
+      tags:
+      - Hosted templates
+      summary: Publish an immutable template release
+      description: Publish an immutable template release
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      state:
+                        type: string
+                    required:
+                    - id
+                    - state
+                    additionalProperties: false
+                required:
+                - version
+                additionalProperties: false
+              example:
+                version:
+                  id: tmplv_…
+                  state: published
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /templates/{id}/archive:
+    post:
+      operationId: post_templates_id_archive
+      tags:
+      - Hosted templates
+      summary: Archive a template
+      description: Archive a template
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  template:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      lifecycle:
+                        type: string
+                    required:
+                    - id
+                    - lifecycle
+                    additionalProperties: false
+                required:
+                - template
+                additionalProperties: false
+              example:
+                template:
+                  id: tmpl_…
+                  lifecycle: archived
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /templates/{id}/restore:
+    post:
+      operationId: post_templates_id_restore
+      tags:
+      - Hosted templates
+      summary: Restore an archived template
+      description: Restore an archived template
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  template:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      lifecycle:
+                        type: string
+                    required:
+                    - id
+                    - lifecycle
+                    additionalProperties: false
+                required:
+                - template
+                additionalProperties: false
+              example:
+                template:
+                  id: tmpl_…
+                  lifecycle: active
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - status
+          properties:
+            message:
+              type: string
+            status:
+              type: integer
+            code:
+              type:
+              - string
+              - 'null'
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: re_…
+      description: Workspace API key. Keep it server-side.
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sendhq_session_v2
+      description: Browser session used for account administration.

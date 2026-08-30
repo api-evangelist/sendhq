@@ -1,0 +1,263 @@
+openapi: 3.2.0
+info:
+  title: SendHQ Deliverability API
+  version: '2026-08-23'
+  description: Send and receive expected email, manage verified domains and hosted templates, and inspect delivery outcomes.
+servers:
+- url: https://sendhq.cc/api/v1
+tags:
+- name: Deliverability
+  description: Inspect events, reputation outcomes, and blocked recipients.
+paths:
+  /deliverability/stats:
+    get:
+      operationId: get_deliverability_stats
+      tags:
+      - Deliverability
+      summary: Retrieve 30-day delivery statistics
+      description: Retrieve 30-day delivery statistics
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  window:
+                    type: string
+                  sent:
+                    type: integer
+                  delivery:
+                    type: integer
+                  bounce:
+                    type: integer
+                  complaint:
+                    type: integer
+                  deliveryRate: {}
+                required:
+                - window
+                - sent
+                - delivery
+                - bounce
+                - complaint
+                - deliveryRate
+                additionalProperties: false
+              example:
+                window: 30d
+                sent: 0
+                delivery: 0
+                bounce: 0
+                complaint: 0
+                deliveryRate: null
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /suppressions:
+    get:
+      operationId: get_suppressions
+      tags:
+      - Deliverability
+      summary: List workspace suppressions
+      description: List workspace suppressions
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /suppressions/{email}:
+    delete:
+      operationId: delete_suppressions_email
+      tags:
+      - Deliverability
+      summary: Remove an eligible bounce suppression
+      description: Remove an eligible bounce suppression
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                - ok
+                additionalProperties: false
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /blocked-recipients:
+    get:
+      operationId: get_blocked_recipients
+      tags:
+      - Deliverability
+      summary: List bounces, complaints, and unsubscribes
+      description: List bounces, complaints, and unsubscribes
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                  summary:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      unsubscribe:
+                        type: integer
+                      bounce:
+                        type: integer
+                      complaint:
+                        type: integer
+                    required:
+                    - total
+                    - unsubscribe
+                    - bounce
+                    - complaint
+                    additionalProperties: false
+                required:
+                - data
+                - count
+                - summary
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+                summary:
+                  total: 0
+                  unsubscribe: 0
+                  bounce: 0
+                  complaint: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - status
+          properties:
+            message:
+              type: string
+            status:
+              type: integer
+            code:
+              type:
+              - string
+              - 'null'
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: re_…
+      description: Workspace API key. Keep it server-side.
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sendhq_session_v2
+      description: Browser session used for account administration.

@@ -1,0 +1,317 @@
+openapi: 3.2.0
+info:
+  title: SendHQ Inbound email API
+  version: '2026-08-23'
+  description: Send and receive expected email, manage verified domains and hosted templates, and inspect delivery outcomes.
+servers:
+- url: https://sendhq.cc/api/v1
+tags:
+- name: Inbound email
+  description: Create addresses and work with received conversations.
+paths:
+  /inboxes:
+    post:
+      operationId: post_inboxes
+      tags:
+      - Inbound email
+      summary: Create an inbound address
+      description: Create an inbound address
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  address:
+                    type: string
+                    format: email
+                  status:
+                    type: string
+                required:
+                - id
+                - address
+                - status
+                additionalProperties: false
+              example:
+                id: inb_…
+                address: support@inbound.example.com
+                status: active
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                domain_id:
+                  type: string
+                local_part:
+                  type: string
+                name:
+                  type: string
+              required:
+              - domain_id
+              - local_part
+              - name
+              additionalProperties: false
+            example:
+              domain_id: dom_…
+              local_part: support
+              name: Support
+    get:
+      operationId: get_inboxes
+      tags:
+      - Inbound email
+      summary: List inbound addresses
+      description: List inbound addresses
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: domain_id
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /inboxes/{id}:
+    get:
+      operationId: get_inboxes_id
+      tags:
+      - Inbound email
+      summary: Retrieve an inbound address
+      description: Retrieve an inbound address
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  address:
+                    type: string
+                    format: email
+                  status:
+                    type: string
+                required:
+                - id
+                - address
+                - status
+                additionalProperties: false
+              example:
+                id: inb_…
+                address: support@example.com
+                status: active
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    patch:
+      operationId: patch_inboxes_id
+      tags:
+      - Inbound email
+      summary: Rename, enable, or disable an inbox
+      description: Rename, enable, or disable an inbox
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                required:
+                - id
+                - status
+                additionalProperties: false
+              example:
+                id: inb_…
+                status: active
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                status:
+                  type: string
+              required:
+              - name
+              - status
+              additionalProperties: false
+            example:
+              name: Customer support
+              status: active
+    delete:
+      operationId: delete_inboxes_id
+      tags:
+      - Inbound email
+      summary: Delete an inbox while retaining messages
+      description: Delete an inbox while retaining messages
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                - ok
+                additionalProperties: false
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - status
+          properties:
+            message:
+              type: string
+            status:
+              type: integer
+            code:
+              type:
+              - string
+              - 'null'
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: re_…
+      description: Workspace API key. Keep it server-side.
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sendhq_session_v2
+      description: Browser session used for account administration.

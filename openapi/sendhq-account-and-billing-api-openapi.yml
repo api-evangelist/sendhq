@@ -1,0 +1,357 @@
+openapi: 3.2.0
+info:
+  title: SendHQ Account and billing API
+  version: '2026-08-23'
+  description: Send and receive expected email, manage verified domains and hosted templates, and inspect delivery outcomes.
+servers:
+- url: https://sendhq.cc/api/v1
+tags:
+- name: Account and billing
+  description: Session-authenticated workspace administration.
+paths:
+  /profile:
+    get:
+      operationId: get_profile
+      tags:
+      - Account and billing
+      summary: Retrieve account, usage, and subscription state
+      description: Retrieve account, usage, and subscription state
+      security:
+      - sessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties: {}
+                    required: []
+                    additionalProperties: false
+                  usage:
+                    type: object
+                    properties: {}
+                    required: []
+                    additionalProperties: false
+                  access:
+                    type: object
+                    properties: {}
+                    required: []
+                    additionalProperties: false
+                  reputation:
+                    type: object
+                    properties: {}
+                    required: []
+                    additionalProperties: false
+                  billing:
+                    type: object
+                    properties: {}
+                    required: []
+                    additionalProperties: false
+                  plans:
+                    type: array
+                    items: {}
+                required:
+                - user
+                - usage
+                - access
+                - reputation
+                - billing
+                - plans
+                additionalProperties: false
+              example:
+                user: {}
+                usage: {}
+                access: {}
+                reputation: {}
+                billing: {}
+                plans: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /billing/checkout:
+    post:
+      operationId: post_billing_checkout
+      tags:
+      - Account and billing
+      summary: Create a hosted checkout session
+      description: Create a hosted checkout session
+      security:
+      - sessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    format: uri
+                  session_id:
+                    type: string
+                required:
+                - url
+                - session_id
+                additionalProperties: false
+              example:
+                url: https://checkout.example/…
+                session_id: …
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plan_key:
+                  type: string
+              required:
+              - plan_key
+              additionalProperties: false
+            example:
+              plan_key: indie_hackers
+  /billing/portal:
+    post:
+      operationId: post_billing_portal
+      tags:
+      - Account and billing
+      summary: Create a billing portal session
+      description: Create a billing portal session
+      security:
+      - sessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    format: uri
+                required:
+                - url
+                additionalProperties: false
+              example:
+                url: https://billing.example/…
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /keys:
+    post:
+      operationId: post_keys
+      tags:
+      - Account and billing
+      summary: Create an API key
+      description: Create an API key
+      security:
+      - sessionCookie: []
+      parameters: []
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  key:
+                    type: string
+                  prefix:
+                    type: string
+                required:
+                - id
+                - name
+                - key
+                - prefix
+                additionalProperties: false
+              example:
+                id: key_…
+                name: Production
+                key: re_…
+                prefix: re_…
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+              - name
+              additionalProperties: false
+            example:
+              name: Production
+    get:
+      operationId: get_keys
+      tags:
+      - Account and billing
+      summary: List API-key metadata
+      description: List API-key metadata
+      security:
+      - sessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /keys/{id}:
+    delete:
+      operationId: delete_keys_id
+      tags:
+      - Account and billing
+      summary: Revoke an API key
+      description: Revoke an API key
+      security:
+      - sessionCookie: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                - ok
+                additionalProperties: false
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - status
+          properties:
+            message:
+              type: string
+            status:
+              type: integer
+            code:
+              type:
+              - string
+              - 'null'
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: re_…
+      description: Workspace API key. Keep it server-side.
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sendhq_session_v2
+      description: Browser session used for account administration.

@@ -1,0 +1,485 @@
+openapi: 3.2.0
+info:
+  title: SendHQ Drafts and attachments API
+  version: '2026-08-23'
+  description: Send and receive expected email, manage verified domains and hosted templates, and inspect delivery outcomes.
+servers:
+- url: https://sendhq.cc/api/v1
+tags:
+- name: Drafts and attachments
+  description: Build composer flows with private attachment storage.
+paths:
+  /drafts:
+    post:
+      operationId: post_drafts
+      tags:
+      - Drafts and attachments
+      summary: Create a composer draft
+      description: Create a composer draft
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  attachments:
+                    type: array
+                    items: {}
+                required:
+                - id
+                - attachments
+                additionalProperties: false
+              example:
+                id: dr_…
+                attachments: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  format: email
+                to:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                subject:
+                  type: string
+              required:
+              - from
+              - to
+              - subject
+              additionalProperties: false
+            example:
+              from: hello@example.com
+              to:
+              - customer@example.net
+              subject: Hello
+    get:
+      operationId: get_drafts
+      tags:
+      - Drafts and attachments
+      summary: List composer drafts
+      description: List composer drafts
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /drafts/{id}:
+    get:
+      operationId: get_drafts_id
+      tags:
+      - Drafts and attachments
+      summary: Retrieve a draft and attachments
+      description: Retrieve a draft and attachments
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  attachments:
+                    type: array
+                    items: {}
+                required:
+                - id
+                - attachments
+                additionalProperties: false
+              example:
+                id: dr_…
+                attachments: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    put:
+      operationId: put_drafts_id
+      tags:
+      - Drafts and attachments
+      summary: Replace draft content
+      description: Replace draft content
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                required:
+                - id
+                additionalProperties: false
+              example:
+                id: dr_…
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  format: email
+                to:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                subject:
+                  type: string
+                text:
+                  type: string
+              required:
+              - from
+              - to
+              - subject
+              - text
+              additionalProperties: false
+            example:
+              from: hello@example.com
+              to:
+              - customer@example.net
+              subject: Updated subject
+              text: Updated body
+    delete:
+      operationId: delete_drafts_id
+      tags:
+      - Drafts and attachments
+      summary: Discard a draft
+      description: Discard a draft
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                - ok
+                additionalProperties: false
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /drafts/{id}/attachments:
+    post:
+      operationId: post_drafts_id_attachments
+      tags:
+      - Drafts and attachments
+      summary: Upload an attachment to a draft
+      description: Upload raw file bytes. Set Content-Type and X-Filename. A message can contain at most 10 files and 10 MB total.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: X-Filename
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  filename:
+                    type: string
+                  sizeBytes:
+                    type: integer
+                  available:
+                    type: boolean
+                required:
+                - id
+                - filename
+                - sizeBytes
+                - available
+                additionalProperties: false
+              example:
+                id: att_…
+                filename: invoice.pdf
+                sizeBytes: 48231
+                available: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /attachments/{id}:
+    get:
+      operationId: get_attachments_id
+      tags:
+      - Drafts and attachments
+      summary: Download a private attachment
+      description: Download a private attachment
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                contentEncoding: binary
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    delete:
+      operationId: delete_attachments_id
+      tags:
+      - Drafts and attachments
+      summary: Delete a private attachment
+      description: Delete a private attachment
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                - ok
+                additionalProperties: false
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /sending-identities:
+    get:
+      operationId: get_sending_identities
+      tags:
+      - Drafts and attachments
+      summary: List verified sender identities
+      description: List verified sender identities
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  domains:
+                    type: array
+                    items: {}
+                  addresses:
+                    type: array
+                    items: {}
+                  localParts:
+                    type: array
+                    items: {}
+                required:
+                - domains
+                - addresses
+                - localParts
+                additionalProperties: false
+              example:
+                domains: []
+                addresses: []
+                localParts: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - status
+          properties:
+            message:
+              type: string
+            status:
+              type: integer
+            code:
+              type:
+              - string
+              - 'null'
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: re_…
+      description: Workspace API key. Keep it server-side.
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sendhq_session_v2
+      description: Browser session used for account administration.

@@ -1,0 +1,639 @@
+openapi: 3.2.0
+info:
+  title: SendHQ Emails and threads API
+  version: '2026-08-23'
+  description: Send and receive expected email, manage verified domains and hosted templates, and inspect delivery outcomes.
+servers:
+- url: https://sendhq.cc/api/v1
+tags:
+- name: Emails and threads
+  description: Send, retrieve, search, reply, and inspect delivery events.
+paths:
+  /emails:
+    post:
+      operationId: post_emails
+      tags:
+      - Emails and threads
+      summary: Send one email
+      description: Send transactional HTML, text, or hosted-template content from a verified workspace domain.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  providerMessageId:
+                    type: string
+                  threadId:
+                    type: string
+                required:
+                - id
+                - providerMessageId
+                - threadId
+                additionalProperties: false
+              example:
+                id: em_…
+                providerMessageId: provider-id
+                threadId: em_…
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                to:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                subject:
+                  type: string
+                html:
+                  type: string
+                text:
+                  type: string
+              required:
+              - from
+              - to
+              - subject
+              - html
+              - text
+              additionalProperties: false
+            example:
+              from: Acme <hello@example.com>
+              to:
+              - customer@example.net
+              subject: Welcome aboard
+              html: <h1>Welcome</h1><p>Your workspace is ready.</p>
+              text: Welcome. Your workspace is ready.
+    get:
+      operationId: get_emails
+      tags:
+      - Emails and threads
+      summary: List sent and received email
+      description: List sent and received email
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: direction
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - in
+          - out
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: domain
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: inbox_id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: unread
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /emails/batch:
+    post:
+      operationId: post_emails_batch
+      tags:
+      - Emails and threads
+      summary: Send up to 100 individualized messages
+      description: Send up to 100 individualized messages
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        index:
+                          type: integer
+                        ok:
+                          type: boolean
+                        id:
+                          type: string
+                      required:
+                      - index
+                      - ok
+                      - id
+                      additionalProperties: false
+                  count:
+                    type: integer
+                  successful:
+                    type: integer
+                  failed:
+                    type: integer
+                required:
+                - data
+                - count
+                - successful
+                - failed
+                additionalProperties: false
+              example:
+                data:
+                - index: 0
+                  ok: true
+                  id: em_…
+                count: 1
+                successful: 1
+                failed: 0
+        '207':
+          description: Successful response with partial outcomes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        index:
+                          type: integer
+                        ok:
+                          type: boolean
+                        id:
+                          type: string
+                      required:
+                      - index
+                      - ok
+                      - id
+                      additionalProperties: false
+                  count:
+                    type: integer
+                  successful:
+                    type: integer
+                  failed:
+                    type: integer
+                required:
+                - data
+                - count
+                - successful
+                - failed
+                additionalProperties: false
+              example:
+                data:
+                - index: 0
+                  ok: true
+                  id: em_…
+                count: 1
+                successful: 1
+                failed: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emails:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      from:
+                        type: string
+                      to:
+                        type: array
+                        items:
+                          type: string
+                          format: email
+                      subject:
+                        type: string
+                      html:
+                        type: string
+                      text:
+                        type: string
+                    required:
+                    - from
+                    - to
+                    - subject
+                    - html
+                    - text
+                    additionalProperties: false
+              required:
+              - emails
+              additionalProperties: false
+            example:
+              emails:
+              - from: Acme <hello@example.com>
+                to:
+                - customer@example.net
+                subject: Welcome aboard
+                html: <h1>Welcome</h1><p>Your workspace is ready.</p>
+                text: Welcome. Your workspace is ready.
+  /emails/{id}:
+    get:
+      operationId: get_emails_id
+      tags:
+      - Emails and threads
+      summary: Retrieve an email and its attachments
+      description: Retrieve an email and its attachments
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  direction:
+                    type: string
+                  status:
+                    type: string
+                  attachments:
+                    type: array
+                    items: {}
+                required:
+                - id
+                - direction
+                - status
+                - attachments
+                additionalProperties: false
+              example:
+                id: em_…
+                direction: out
+                status: sent
+                attachments: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    patch:
+      operationId: patch_emails_id
+      tags:
+      - Emails and threads
+      summary: Mark an email read or unread
+      description: Mark an email read or unread
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  readAt:
+                    type: string
+                    format: date-time
+                required:
+                - id
+                - readAt
+                additionalProperties: false
+              example:
+                id: em_…
+                readAt: '2026-08-23T12:00:00.000Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                read:
+                  type: boolean
+              required:
+              - read
+              additionalProperties: false
+            example:
+              read: true
+    delete:
+      operationId: delete_emails_id
+      tags:
+      - Emails and threads
+      summary: Delete a retained email
+      description: Delete a retained email
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                required:
+                - ok
+                additionalProperties: false
+              example:
+                ok: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /emails/{id}/events:
+    get:
+      operationId: get_emails_id_events
+      tags:
+      - Emails and threads
+      summary: List delivery events for an email
+      description: List delivery events for an email
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - data
+                - count
+                additionalProperties: false
+              example:
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /threads/{id}:
+    get:
+      operationId: get_threads_id
+      tags:
+      - Emails and threads
+      summary: Retrieve a conversation chronologically
+      description: Retrieve a conversation chronologically
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  data:
+                    type: array
+                    items: {}
+                  count:
+                    type: integer
+                required:
+                - id
+                - data
+                - count
+                additionalProperties: false
+              example:
+                id: em_…
+                data: []
+                count: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - status
+          properties:
+            message:
+              type: string
+            status:
+              type: integer
+            code:
+              type:
+              - string
+              - 'null'
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: re_…
+      description: Workspace API key. Keep it server-side.
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sendhq_session_v2
+      description: Browser session used for account administration.
