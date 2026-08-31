@@ -26,12 +26,10 @@ created: '2026-08-24'
 modified: '2026-08-24'
 specificationVersion: '0.23'
 tags:
-- Email
+- email api
 - Transactional Email
-- Messaging
-- Deliverability
-- Agents
-- Developer Tools
+- Inbound Email
+- deliverability
 tags_raw:
 - email api
 - transactional email
@@ -152,6 +150,8 @@ apis:
   humanURL: https://sendhq.cc/docs/api-reference
   baseURL: https://sendhq.cc/api/v1
   tags:
+  - Inbound Email
+  tags_raw:
   - Inbound email
   properties:
   - type: OpenAPI
