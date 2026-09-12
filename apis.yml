@@ -1,13 +1,6 @@
 aid: sendhq
 name: SendHQ
-description: >-
-  SendHQ is a transactional email API for product teams and AI agents — verified-domain sending,
-  inbound email, hosted templates, drafts and attachments, delivery events, suppressions and
-  workspace-scoped API keys, with a web dashboard at app.sendhq.cc. The public contract is an
-  OpenAPI 3.1 document of 32 paths and 47 operations served from sendhq.cc/api/v1, authenticated
-  with a bearer token or a session cookie. The largest operation groups are hosted templates,
-  drafts and attachments, emails and threads, account and billing, domains, inbound email and
-  deliverability. The company markets the product explicitly at coding agents.
+description: SendHQ is a transactional email API for product teams and AI agents — verified-domain sending, inbound email, hosted templates, drafts and attachments, delivery events, suppressions and workspace-scoped API keys, with a web dashboard at app.sendhq.cc. The public contract is an OpenAPI 3.1 document of 32 paths and 47 operations served from sendhq.cc/api/v1, authenticated with a bearer token or a session cookie. The largest operation groups are hosted templates, drafts and attachments, emails and threads, account and billing, domains, inbound email and deliverability. The company markets the product explicitly at coding agents.
 type: Index
 url: https://raw.githubusercontent.com/api-evangelist/sendhq/refs/heads/main/apis.yml
 deliveryModel:
@@ -164,6 +157,35 @@ apis:
     url: https://sendhq.cc/docs
   - type: Guides
     url: https://sendhq.cc/guides
+- name: SendHQ REST API
+  description: Resend-compatible REST API for transactional and inbound email, domains, templates, deliverability, and workspace administration. Base URL https://sendhq.cc/api/v1 with Bearer re_ API keys.
+  humanURL: https://sendhq.cc/docs/api-reference
+  baseURL: https://sendhq.cc/api/v1
+  tags:
+  - Email API
+  - Transactional Email
+  - Inbound Email
+  - Email Deliverability
+  - Developer Tools
+  - AI Infrastructure
+  - Agent Ready
+  tags_raw:
+  - email API
+  - transactional email
+  - inbound email
+  - email deliverability
+  - developer tools
+  - AI infrastructure
+  - agent-ready
+  properties:
+  - type: OpenAPI
+    url: https://sendhq.cc/openapi.json
+  - type: Documentation
+    url: https://sendhq.cc/docs
+  - type: Documentation
+    url: https://sendhq.cc/docs/authentication
+  - type: Documentation
+    url: https://sendhq.cc/docs/api-reference
 common:
 - type: LLMsTxt
   url: llms/sendhq-llms.txt
@@ -193,23 +215,4 @@ x-provenance:
   added: '2026-08-24'
   method: searched
   source: https://sendhq.cc/openapi.json
-  note: >-
-    Submitted via apis.io/add on 2026-08-24 and auto-published by the gate at rating 51.
-    THE HOST RETURNS A SOFT-200 AND IT NEARLY COST THEM THE LISTING. sendhq.cc answers any
-    unknown path with an identical 1,212-byte HTML page — same SHA for /apis.json, for
-    /for-agents, and for two invented control paths. Both URLs in the submission point at that
-    page, so the first pass read the whole site as a catch-all and the record was almost declined
-    on that basis. It was wrong. The real pages are real and each a different size: /docs 8,806,
-    /docs/api-reference 8,306, /guides 13,363, plus tools, templates, glossary, terms, privacy and
-    contact. The 1,212-byte page is only what a missing path returns.
-    The specification is at /openapi.json — 48,625 bytes, OpenAPI 3.1, 32 paths, 47 operations,
-    bearerAuth and sessionCookie — and was found from the site's own API-reference page rather
-    than by guessing. The API is live and correctly gated: /api/v1/emails and /api/v1/domains both
-    return 401 JSON.
-    ONE THING FOR THE PROVIDER. SendHQ markets itself as an "AI-agent-ready email API" aimed at
-    Claude, Codex, Cursor and OpenClaw, and its llms.txt is real. But /.well-known/agent.json,
-    /.well-known/api-catalog and /.well-known/mcp all return the 1,212-byte catch-all rather than
-    a document, so an agent discovering this provider the standard way finds nothing. Only the
-    llms.txt and the OpenAPI are genuinely served.
-    Every URL recorded here was fetched and its size checked against that catch-all so no artifact
-    in this record is the placeholder page.
+  note: 'Submitted via apis.io/add on 2026-08-24 and auto-published by the gate at rating 51. THE HOST RETURNS A SOFT-200 AND IT NEARLY COST THEM THE LISTING. sendhq.cc answers any unknown path with an identical 1,212-byte HTML page — same SHA for /apis.json, for /for-agents, and for two invented control paths. Both URLs in the submission point at that page, so the first pass read the whole site as a catch-all and the record was almost declined on that basis. It was wrong. The real pages are real and each a different size: /docs 8,806, /docs/api-reference 8,306, /guides 13,363, plus tools, templates, glossary, terms, privacy and contact. The 1,212-byte page is only what a missing path returns. The specification is at /openapi.json — 48,625 bytes, OpenAPI 3.1, 32 paths, 47 operations, bearerAuth and sessionCookie — and was found from the site''s own API-reference page rather than by guessing. The API is live and correctly gated: /api/v1/emails and /api/v1/domains both return 401 JSON. ONE THING FOR THE PROVIDER. SendHQ markets itself as an "AI-agent-ready email API" aimed at Claude, Codex, Cursor and OpenClaw, and its llms.txt is real. But /.well-known/agent.json, /.well-known/api-catalog and /.well-known/mcp all return the 1,212-byte catch-all rather than a document, so an agent discovering this provider the standard way finds nothing. Only the llms.txt and the OpenAPI are genuinely served. Every URL recorded here was fetched and its size checked against that catch-all so no artifact in this record is the placeholder page.'
