@@ -1,0 +1,104 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "SendHQ",
+    "documentationUrl": "https://sendhq.cc/docs",
+    "logoUrl": "https://sendhq.cc/logo.png"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:sendhq.cc:api:email",
+      "displayName": "SendHQ API",
+      "type": "application/vnd.oai.openapi+json;version=3.1",
+      "url": "https://sendhq.cc/openapi.json",
+      "description": "Workspace-scoped REST API for expected outbound and inbound email, verified domains, hosted templates, delivery events, and suppressions.",
+      "tags": [
+        "email",
+        "transactional-email",
+        "inbound-email",
+        "openapi",
+        "rest"
+      ],
+      "capabilities": [
+        "send_email",
+        "receive_email",
+        "manage_domains",
+        "manage_inboxes",
+        "manage_templates",
+        "inspect_delivery_events"
+      ],
+      "representativeQueries": [
+        "send a transactional email from my verified domain",
+        "receive replies for a product inbox",
+        "inspect bounce and delivery events for an email",
+        "publish and send a hosted email template"
+      ],
+      "version": "2026-09-07",
+      "updatedAt": "2026-08-26T00:00:00Z",
+      "trustManifest": {
+        "identity": "did:web:sendhq.cc",
+        "identityType": "did"
+      }
+    },
+    {
+      "identifier": "urn:air:sendhq.cc:skill:email",
+      "displayName": "SendHQ Email Skill",
+      "type": "application/ai-skill+md",
+      "url": "https://sendhq.cc/.well-known/agent-skills/sendhq-email/SKILL.md",
+      "description": "Instructions for safely operating SendHQ's documented email API and interpreting its outcomes.",
+      "tags": [
+        "email",
+        "agent-skill",
+        "transactional-email",
+        "deliverability"
+      ],
+      "capabilities": [
+        "send_email",
+        "configure_email_domain",
+        "receive_email",
+        "inspect_delivery_events"
+      ],
+      "representativeQueries": [
+        "use SendHQ to send an account verification email",
+        "set up a domain and inbound address in SendHQ",
+        "check why a SendHQ message bounced"
+      ],
+      "version": "2026-09-07",
+      "updatedAt": "2026-08-26T00:00:00Z",
+      "trustManifest": {
+        "identity": "did:web:sendhq.cc",
+        "identityType": "did"
+      }
+    },
+    {
+      "identifier": "urn:air:sendhq.cc:mcp:docs",
+      "displayName": "SendHQ documentation MCP server",
+      "type": "application/mcp-server-card+json",
+      "url": "https://sendhq.cc/.well-known/mcp/server-card.json",
+      "description": "Read-only tools and resources for SendHQ's public API, authentication, pricing, and integration documentation.",
+      "tags": [
+        "email",
+        "documentation",
+        "mcp",
+        "openapi"
+      ],
+      "capabilities": [
+        "get_sendhq_api_overview",
+        "get_sendhq_pricing",
+        "get_sendhq_authentication_guide",
+        "find_sendhq_documentation"
+      ],
+      "representativeQueries": [
+        "how do I authenticate to SendHQ",
+        "what does SendHQ cost",
+        "find SendHQ documentation for inbound email"
+      ],
+      "version": "2026-09-07",
+      "updatedAt": "2026-08-26T00:00:00Z",
+      "trustManifest": {
+        "identity": "did:web:sendhq.cc",
+        "identityType": "did"
+      }
+    }
+  ]
+}
