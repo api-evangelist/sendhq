@@ -21,7 +21,7 @@ specificationVersion: '0.23'
 tags:
 - Email API
 - Transactional Email
-- inbound email
+- Inbound Email
 - Deliverability
 tags_raw:
 - email api
@@ -143,7 +143,7 @@ apis:
   humanURL: https://sendhq.cc/docs/api-reference
   baseURL: https://sendhq.cc/api/v1
   tags:
-  - inbound email
+  - Inbound Email
   tags_raw:
   - Inbound email
   properties:
@@ -157,35 +157,6 @@ apis:
     url: https://sendhq.cc/docs
   - type: Guides
     url: https://sendhq.cc/guides
-- name: SendHQ REST API
-  description: Resend-compatible REST API for transactional and inbound email, domains, templates, deliverability, and workspace administration. Base URL https://sendhq.cc/api/v1 with Bearer re_ API keys.
-  humanURL: https://sendhq.cc/docs/api-reference
-  baseURL: https://sendhq.cc/api/v1
-  tags:
-  - Email API
-  - Transactional Email
-  - Inbound Email
-  - Email Deliverability
-  - Developer Tools
-  - AI Infrastructure
-  - Agent Ready
-  tags_raw:
-  - email API
-  - transactional email
-  - inbound email
-  - email deliverability
-  - developer tools
-  - AI infrastructure
-  - agent-ready
-  properties:
-  - type: OpenAPI
-    url: https://sendhq.cc/openapi.json
-  - type: Documentation
-    url: https://sendhq.cc/docs
-  - type: Documentation
-    url: https://sendhq.cc/docs/authentication
-  - type: Documentation
-    url: https://sendhq.cc/docs/api-reference
 common:
 - type: LLMsTxt
   url: llms/sendhq-llms.txt
