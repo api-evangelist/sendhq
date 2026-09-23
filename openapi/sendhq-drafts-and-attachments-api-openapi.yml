@@ -15,7 +15,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: Create a composer draft
-      description: Create a composer draft
       security:
       - bearerAuth: []
       parameters: []
@@ -79,7 +78,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: List composer drafts
-      description: List composer drafts
       security:
       - bearerAuth: []
       parameters: []
@@ -117,7 +115,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: Retrieve a draft and attachments
-      description: Retrieve a draft and attachments
       security:
       - bearerAuth: []
       parameters:
@@ -159,7 +156,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: Replace draft content
-      description: Replace draft content
       security:
       - bearerAuth: []
       parameters:
@@ -227,7 +223,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: Discard a draft
-      description: Discard a draft
       security:
       - bearerAuth: []
       parameters:
@@ -320,7 +315,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: Download a private attachment
-      description: Download a private attachment
       security:
       - bearerAuth: []
       parameters:
@@ -350,7 +344,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: Delete a private attachment
-      description: Delete a private attachment
       security:
       - bearerAuth: []
       parameters:
@@ -388,7 +381,6 @@ paths:
       tags:
       - Drafts and attachments
       summary: List verified sender identities
-      description: List verified sender identities
       security:
       - bearerAuth: []
       parameters: []
@@ -427,6 +419,31 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  responses:
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -447,31 +464,6 @@ components:
               type:
               - string
               - 'null'
-  responses:
-    Unauthorized:
-      description: Missing or invalid authentication
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: A usage or reputation limit was reached
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

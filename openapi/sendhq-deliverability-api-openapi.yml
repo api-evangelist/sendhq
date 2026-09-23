@@ -15,7 +15,6 @@ paths:
       tags:
       - Deliverability
       summary: Retrieve 30-day delivery statistics
-      description: Retrieve 30-day delivery statistics
       security:
       - bearerAuth: []
       parameters: []
@@ -67,7 +66,6 @@ paths:
       tags:
       - Deliverability
       summary: List workspace suppressions
-      description: List workspace suppressions
       security:
       - bearerAuth: []
       parameters: []
@@ -105,7 +103,6 @@ paths:
       tags:
       - Deliverability
       summary: Remove an eligible bounce suppression
-      description: Remove an eligible bounce suppression
       security:
       - bearerAuth: []
       parameters:
@@ -143,7 +140,6 @@ paths:
       tags:
       - Deliverability
       summary: List bounces, complaints, and unsubscribes
-      description: List bounces, complaints, and unsubscribes
       security:
       - bearerAuth: []
       parameters:
@@ -205,6 +201,31 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  responses:
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -225,31 +246,6 @@ components:
               type:
               - string
               - 'null'
-  responses:
-    Unauthorized:
-      description: Missing or invalid authentication
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: A usage or reputation limit was reached
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

@@ -15,7 +15,6 @@ paths:
       tags:
       - Account and billing
       summary: Retrieve account, usage, and subscription state
-      description: Retrieve account, usage, and subscription state
       security:
       - sessionCookie: []
       parameters: []
@@ -84,7 +83,6 @@ paths:
       tags:
       - Account and billing
       summary: Create a hosted checkout session
-      description: Create a hosted checkout session
       security:
       - sessionCookie: []
       parameters: []
@@ -136,7 +134,6 @@ paths:
       tags:
       - Account and billing
       summary: Create a billing portal session
-      description: Create a billing portal session
       security:
       - sessionCookie: []
       parameters: []
@@ -170,7 +167,6 @@ paths:
       tags:
       - Account and billing
       summary: Create an API key
-      description: Create an API key
       security:
       - sessionCookie: []
       parameters: []
@@ -228,7 +224,6 @@ paths:
       tags:
       - Account and billing
       summary: List API-key metadata
-      description: List API-key metadata
       security:
       - sessionCookie: []
       parameters: []
@@ -266,7 +261,6 @@ paths:
       tags:
       - Account and billing
       summary: Revoke an API key
-      description: Revoke an API key
       security:
       - sessionCookie: []
       parameters:
@@ -299,6 +293,31 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  responses:
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -319,31 +338,6 @@ components:
               type:
               - string
               - 'null'
-  responses:
-    Unauthorized:
-      description: Missing or invalid authentication
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: A usage or reputation limit was reached
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

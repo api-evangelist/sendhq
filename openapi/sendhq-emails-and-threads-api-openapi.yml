@@ -94,7 +94,6 @@ paths:
       tags:
       - Emails and threads
       summary: List sent and received email
-      description: List sent and received email
       security:
       - bearerAuth: []
       parameters:
@@ -199,7 +198,6 @@ paths:
       tags:
       - Emails and threads
       summary: Send up to 100 individualized messages
-      description: Send up to 100 individualized messages
       security:
       - bearerAuth: []
       parameters:
@@ -352,7 +350,6 @@ paths:
       tags:
       - Emails and threads
       summary: Retrieve an email and its attachments
-      description: Retrieve an email and its attachments
       security:
       - bearerAuth: []
       parameters:
@@ -402,7 +399,6 @@ paths:
       tags:
       - Emails and threads
       summary: Mark an email read or unread
-      description: Mark an email read or unread
       security:
       - bearerAuth: []
       parameters:
@@ -458,7 +454,6 @@ paths:
       tags:
       - Emails and threads
       summary: Delete a retained email
-      description: Delete a retained email
       security:
       - bearerAuth: []
       parameters:
@@ -496,7 +491,6 @@ paths:
       tags:
       - Emails and threads
       summary: List delivery events for an email
-      description: List delivery events for an email
       security:
       - bearerAuth: []
       parameters:
@@ -539,7 +533,6 @@ paths:
       tags:
       - Emails and threads
       summary: Retrieve a conversation chronologically
-      description: Retrieve a conversation chronologically
       security:
       - bearerAuth: []
       parameters:
@@ -581,6 +574,31 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  responses:
+    RateLimited:
+      description: A usage or reputation limit was reached
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -601,31 +619,6 @@ components:
               type:
               - string
               - 'null'
-  responses:
-    Unauthorized:
-      description: Missing or invalid authentication
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: A usage or reputation limit was reached
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
