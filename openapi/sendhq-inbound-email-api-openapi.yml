@@ -255,6 +255,12 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     RateLimited:
       description: A usage or reputation limit was reached
       content:
@@ -269,12 +275,6 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid authentication
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
       content:
         application/json:
           schema:
