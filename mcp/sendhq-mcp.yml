@@ -16,12 +16,15 @@ deployment:
 tools_count: 4
 tools:
 - name: get_sendhq_api_overview
-  description: ''
+  description: Read SendHQ's public API capabilities, base URL, authentication boundary, and safety limits.
 - name: get_sendhq_pricing
-  description: ''
+  description: Read SendHQ's published plan prices, email allowances, domain limits, and product boundaries.
 - name: get_sendhq_authentication_guide
-  description: ''
+  description: Read how a server-side application or agent authenticates to SendHQ using a workspace API
+    key.
 - name: find_sendhq_documentation
-  description: ''
+  description: Find the most relevant public SendHQ documentation pages for a developer question.
 tools_source: live tools/list via initialize handshake, 2026-09-11 (signals/audit_mcp_authorship.py --probe)
 authorship: provider
+descriptions_source: live tools/list (authorship probe or saved capture); filled by backfill-tools-from-authorship.py
+  --descriptions, 2026-09-28
