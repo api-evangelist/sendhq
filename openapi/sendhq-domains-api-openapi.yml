@@ -266,6 +266,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     RateLimited:
       description: A usage or reputation limit was reached
       content:
@@ -274,12 +280,6 @@ components:
             $ref: '#/components/schemas/Error'
     BadRequest:
       description: Invalid request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid authentication
       content:
         application/json:
           schema:
