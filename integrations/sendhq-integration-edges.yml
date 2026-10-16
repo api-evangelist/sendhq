@@ -14,7 +14,7 @@ edges:
     registered_name: cc.sendhq/sendhq
     register_id: cc.sendhq/sendhq
     detected_by: sweep-agent-tools.py
-    detected: '2026-10-14'
+    detected: '2026-10-15'
   mcp_registry:
     servers:
     - cc.sendhq/sendhq
