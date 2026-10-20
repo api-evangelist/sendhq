@@ -1,0 +1,127 @@
+{
+  "endpoint": "https://sendhq.cc/api/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "sendhq-docs",
+    "version": "2026-09-07"
+  },
+  "result": {
+    "tools": [
+      {
+        "name": "get_sendhq_api_overview",
+        "description": "Read SendHQ's public API capabilities, base URL, authentication boundary, and safety limits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "detailLevel": {
+              "type": "string",
+              "enum": [
+                "summary",
+                "full"
+              ],
+              "default": "full",
+              "description": "Return a compact summary or the full API group and safety-boundary inventory."
+            }
+          },
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "get_sendhq_pricing",
+        "description": "Read SendHQ's published plan prices, email allowances, domain limits, and product boundaries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "plan": {
+              "type": "string",
+              "enum": [
+                "all",
+                "starter-transactional",
+                "starter-transactional-annual",
+                "starter-marketing",
+                "starter-marketing-annual",
+                "scale-transactional",
+                "scale-transactional-annual",
+                "scale-marketing",
+                "scale-marketing-annual"
+              ],
+              "default": "all",
+              "description": "Return every published plan or focus the response on one plan identifier."
+            }
+          },
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "get_sendhq_authentication_guide",
+        "description": "Read how a server-side application or agent authenticates to SendHQ using a workspace API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "stage": {
+              "type": "string",
+              "enum": [
+                "all",
+                "discover",
+                "pick-method",
+                "register",
+                "claim",
+                "use-credential",
+                "errors",
+                "revocation"
+              ],
+              "default": "all",
+              "description": "Return the complete guide or one named credential-lifecycle stage."
+            }
+          },
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "find_sendhq_documentation",
+        "description": "Find the most relevant public SendHQ documentation pages for a developer question.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "query"
+          ],
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 200,
+              "description": "A short topic such as authentication, inbound email, templates, DNS, suppressions, or billing."
+            }
+          },
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      }
+    ]
+  }
+}
